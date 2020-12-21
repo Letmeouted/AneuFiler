@@ -1,7 +1,7 @@
 /*
  * @Author: whf
  * @Date: 2020-11-19 15:07:54
- * @LastEditTime: 2020-12-21 12:29:22
+ * @LastEditTime: 2020-12-21 15:16:48
  * @FilePath: \AneuFiler\main.js
  */
 const {app, BrowserWindow} = require('electron')
@@ -14,7 +14,7 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 680,
-    height: 410,
+    height: 510,
     autoHideMenuBar: true,
     frame: true,
     transparent: false,
