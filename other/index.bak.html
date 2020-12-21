@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>AneuFiler</title>
+    <script>
+      if (typeof module === 'object') {window.module = module; module = undefined;}
+    </script>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script>if (window.module) module = window.module;</script>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+
+    <span style="cursor:pointer">
+      <div id="holder" class="dropify-wrapper">
+        <div id="message" class="dropify-message">
+          点击或将文件拖拽到此区域处理
+        </div>
+      </div>
+    </span>
+
+    <div class="container">
+      <div class="switch-box is-danger">
+        <input id="danger" class="switch-box-input" type="checkbox" />
+        <label for="danger" class="switch-box-slider"></label>
+        <label for="danger" class="switch-box-label">按样本输出</label>
+      </div>
+    </div>
+
+    <div style="text-align:right">
+      <button class="button button1" onclick="window.open('https://github.com/NTLx/AneuFiler')">帮助</button>
+      <button class="button button2" onclick="javascript:window.close()">退出</button>
+    </div>
+
+    <script>
+      var switch_status=0;
+      $(document).ready(function(){
+        $("#danger").on('click', function(){ clickSwitch() });
+        var clickSwitch = function() {
+          if ($("#danger").is(':checked')) {
+            console.log("在ON的状态下");
+            switch_status=1;
+          } else {
+            console.log("在OFF的状态下");
+            switch_status=0;
+          }
+        };
+      });
+      const router = require('./renderer.js')
+      // event: drag file(s) to window
+      const holder = document.getElementById('holder')
+      holder.ondragover = () => {
+        return false;
+      }
+      holder.ondragleave = holder.ondragend = () => {
+        return false;
+      }
+      holder.ondrop = (e) => {
+        e.preventDefault()
+        for (let f of e.dataTransfer.files) {
+          console.log('File(s) you dragged here: ', f.path)
+          router.start(f.path,switch_status);
+          document.getElementById("message").innerHTML = "请在输入文件所在目录内查看输出结果<br>可继续点击或将文件拖拽到此区域处理";
+        }
+        return false;
+      }
+
+      // event: click to open file manager
+      const os = require('os');
+      let default_path=os.homedir();
+      function showOpenDialogHandler() {
+        var options = {
+          defaultPath: default_path,
+          filters: [
+            { name: 'RawData', extensions: ['txt','csv'] }
+          ],
+          properties: ['openFile']
+        }
+        dialog.showOpenDialog(options, (fileNames) => {
+          // fileNames is an array that contains all the selected
+          if (!fileNames[0]) {
+            console.log("No file selected");
+            document.getElementById("message").innerHTML = "未选择任何文件，可继续选择";
+            return;
+          } else {
+            console.log("Select file: "+fileNames[0]);
+            router.start(fileNames[0],switch_status);
+            document.getElementById("message").innerHTML = "请在输入文件所在目录内查看输出结果<br>可继续点击或将文件拖拽到此区域处理";
+          }
+        });
+      }
+      const {dialog} = require('electron').remote;
+      const fileManagerBtn = document.getElementById('holder')
+      fileManagerBtn.addEventListener('click', showOpenDialogHandler)
+    </script>
+  </body>
+</html>

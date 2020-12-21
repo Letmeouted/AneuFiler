@@ -1,0 +1,64 @@
+{
+  "name": "aneufiler",
+  "author": "NTLx",
+  "version": "0.1.1",
+  "description": "AneuFiler",
+  "license": "GPL-3.0",
+  "repository": "https://github.com/Cubicise-Medical/G020.git",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [
+    "Electron",
+    "Data Analysis",
+    "AneuFiler"
+  ],
+  "devDependencies": {
+    "electron": "^11.1.0"
+  },
+  "build": {
+    "appId": "AneuFiler.app",
+    "productName": "AneuFiler",
+    "files": [
+      "data_process",
+      "data_process_win.exe",
+      "main.js",
+      "index.html",
+      "renderer.js",
+      "style.css",
+      "jquery-3.4.1.min.js"
+    ],
+    "directories": {
+      "buildResources": "build",
+      "output": "dist"
+    },
+    "dmg": {
+      "title": "AneuFiler",
+      "icon": "build/Icon.icns"
+    },
+    "mac": {
+      "category": "public.app-category.developer-tools",
+      "target": [
+        "dmg"
+      ],
+      "icon": "icons/Icon.icns",
+      "artifactName": "${productName}.v${version}.MacOS.${ext}"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "ia32"
+          ]
+        }
+      ],
+      "artifactName": "${productName}.v${version}.Win_Portable.${ext}"
+    }
+  },
+  "dependencies": {
+    "default-passive-events": "^2.0.0",
+    "mdui": "^1.0.1"
+  }
+}
